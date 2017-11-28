@@ -3,8 +3,8 @@
 
 #include "TimerOne.h"
 
-unsigned long volt = 0;
-unsigned long amp = 0;
+long volt = 0;
+long amp = 0;
 int rePow = 0;
 int imPow = 0;
 
@@ -30,8 +30,8 @@ void loop() {
 			volt /= samples;
 			amp /= samples;
 		} else {
-			volt = sqrt(volt / (samples / 2));
-			amp = sqrt(amp / (samples / 2));
+			volt = sqrt(volt / (samples / 2)) / 2;
+			amp = sqrt(amp / (samples / 2)) / 2;
 		}
 		Serial.print(volt);
 		Serial.print(", ");
@@ -51,7 +51,7 @@ void measureInterrupt() {
 	uint8_t analog_reference = DEFAULT;
 	uint8_t low = ADCL;
 	uint8_t high = ADCH;
-	unsigned long measuredValue = (high << 8) | low;  // reads ADC
+	long measuredValue = (high << 8) | low;  // reads ADC
 
 	if (count % 2 == 0) {
 		ADMUX = (analog_reference << 6) | (aPin & 0x07);  // switch multiplexer to currant
