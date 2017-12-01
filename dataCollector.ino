@@ -17,11 +17,12 @@ long voltOffset = 250;
 long ampOffset = 250;
 
 long tempVolt = 0;
-long samples = 50000;
+long samples = 5000;
 long samplerate = 175;
 long count = 0;
+unsigned sampleNumber = 0;
 
-int vPin = 0;
+int vPin = 2;
 int aPin = 1;
 
 bool debug = true;
@@ -48,18 +49,22 @@ void loop() {
 		realPower = (float) rePow / (samples / 2 * 10000);
 		if (totalPower > realPower) imagPower = sqrt(pow(totalPower, 2) - pow(realPower, 2));
 		else imagPower = 0.0;
-
+    if (imagPower == 'nan') {
+      imagPower = 0.0;
+    }
 		voltSquares= 0;
 		ampSquares = 0;
 		rePow = 0;
 		count = 0;
 		sei();  // enables interrupts
-		
+
 		Serial.print(voltage); Serial.print(", ");
 		Serial.print(currant); Serial.print("; "); 
 		Serial.print(totalPower); Serial.print(", ");
 		Serial.print(realPower); Serial.print(", "); 
-		Serial.print(imagPower); Serial.print("\n");
+		Serial.print(imagPower); Serial.print(": ");
+    Serial.print(sampleNumber ++);
+		Serial.print("\n");
 	} 
 }
 
