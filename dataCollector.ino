@@ -22,6 +22,7 @@ long tempVolt = 0;
 long samples = 5000;
 long samplerate = 155;
 long count = 0;
+unsigned sampleNumber = 0;
 
 
 int vPin = 2;
@@ -70,8 +71,10 @@ void loop() {
 		Serial.print(current); Serial.print("; "); 
 		Serial.print(totalPower); Serial.print(", ");
 		Serial.print(realPower); Serial.print(", "); 
-		Serial.print(imagPower); Serial.print("; ");
-    Serial.print(measureRange); Serial.print("\n ");
+		Serial.print(imagPower); 
+		// Serial.print("; "); Serial.print(measureRange); 
+		Serial.print(": "); Serial.print(sampleNumber ++);
+		Serial.print("\n");
 	} 
 }
 
