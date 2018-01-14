@@ -19,7 +19,8 @@ long voltOffset = 250; // vlt 248
 long ampOffset = 250;
 
 long tempVolt = 0;
-long samples = 5000;
+// long samples = 5000;
+long samples = 10000;
 long samplerate = 155;
 long count = 0;
 unsigned sampleNumber = 0;
@@ -29,6 +30,7 @@ int vPin = 2;
 int aPin = 0;
 int ledPin = 8;
 int mrPin = 7;
+int onPin = 5;
 
 bool debug = true;
 bool debugRMS = false;  // switches between rms and mean
@@ -39,6 +41,8 @@ void setup() {
 	Timer1.attachInterrupt(measureInterrupt);
   pinMode(ledPin, OUTPUT);
   pinMode(mrPin, INPUT_PULLUP);
+  pinMode(onPin, OUTPUT);
+  digitalWrite(onPin, HIGH);
 }
 
 void loop() {
@@ -47,17 +51,17 @@ void loop() {
 			voltage = voltSquares / samples;
 			ampSquares/= samples;
 		} else {
-			voltage = (sqrt((float) voltSquares/ (samples / 2)) / 100 - 1.2) * 0.99; // funzt aber cheating (-1.2 *0.99 === cheating)
+			voltage = (sqrt((float) voltSquares/ (samples / 2)) / 100)*0.92 ; // funzt aber cheating (-1.2 *0.99 === cheating)
 			// voltSquares= sqrt(voltSquares/ (samples / 2));
      if(measureRange==1){
-			current = sqrt((float) ampSquares/ (samples / 2)) / 100 / 1.14; // funzt aber cheating (/1.14 === cheating)
+			current = sqrt((float) ampSquares/ (samples / 2)) / 100 * 0.881 - 0.02; // funzt aber cheating (/1.14 === cheating)
      } else {
-      current = sqrt((float) ampSquares/ (samples / 2)) / 100 * 0.9042 ; // funzt aber cheating (*0.9042 === cheating)
+      current = sqrt((float) ampSquares/ (samples / 2)) / 100 * 1.256; // funzt aber cheating (*0.9042 === cheating)
 		  //ampSquares= sqrt(ampSquares/ (samples / 2));
      }
 		}
 		totalPower = current * voltage;
-		realPower = (float) rePow / (samples / 2 * 10000);
+		realPower = (float) abs((float)  / (samples / 2 * 10000));
 		if (totalPower > realPower) imagPower = sqrt(pow(totalPower, 2) - pow(realPower, 2));
 		else imagPower = 0.0;
 
@@ -70,8 +74,8 @@ void loop() {
 		Serial.print(voltage); Serial.print(", ");
 		Serial.print(current); Serial.print("; "); 
 		Serial.print(totalPower); Serial.print(", ");
-		Serial.print(realPower); Serial.print(", "); 
-		Serial.print(imagPower); 
+		Serial.print(imagPower); Serial.print(", "); 
+		Serial.print(realPower); 
 		// Serial.print("; "); Serial.print(measureRange); 
 		Serial.print(": "); Serial.print(sampleNumber ++);
 		Serial.print("\n");
