@@ -21,7 +21,7 @@ long ampOffset = 250;
 long tempVolt = 0;
 // long samples = 5000;
 long samples = 10000;
-long samplerate = 155;
+long samplerate = 170;
 long count = 0;
 unsigned sampleNumber = 0;
 
@@ -61,7 +61,7 @@ void loop() {
      }
 		}
 		totalPower = current * voltage;
-		realPower = (float) abs((float)  / (samples / 2 * 10000));
+		realPower = (float) abs((float) rePow / (samples / 2 * 10000));
 		if (totalPower > realPower) imagPower = sqrt(pow(totalPower, 2) - pow(realPower, 2));
 		else imagPower = 0.0;
 
